@@ -17,7 +17,6 @@ mysql hibernate_example -u ep -pq123 < schema.sql
 bundle install
 jbundle install
 
-# Run
-jruby ./hibernate_example.rb
+# Run tests/examples
+bundle exec rspec spec
 ```
-Then look to the DB and check for the persisted models.

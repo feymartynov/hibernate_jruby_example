@@ -1,26 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping package="rubyobj">
   <class entity-name="Order" table="orders">
-    <id name="id" type="java.lang.Long">
-      <generator class="increment" />
+    <id name="id" type="long">
+      <generator class="native" />
     </id>
 
-    <set name="lines" cascade="all">
+    <bag name="lines" table="order_lines" order-by="position asc" cascade="all">
       <key column="order_id" not-null="true" />
       <one-to-many entity-name="Order::Line" />
-    </set>
+    </bag>
   </class>
 
   <class entity-name="Order::Line" table="order_lines">
-    <id name="id" type="java.lang.Long">
-      <generator class="increment" />
+    <id name="id" type="long">
+      <generator class="native" />
     </id>
 
-    <property name="title" type="java.lang.String" />
-    <property name="price" type="java.lang.Double" />
+    <property name="title" type="string" />
+    <property name="price" type="double" scale="2" />
+    <property name="position" type="long" />
   </class>
 </hibernate-mapping>
