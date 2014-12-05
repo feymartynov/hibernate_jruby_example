@@ -1,3 +1,7 @@
+require 'lib/poro_property_accessor'
+require 'lib/poro_entity_tuplizer'
+require 'lib/poro_component_tuplizer'
+
 module DB
   def self.transaction
     session = session_factory.get_current_session
@@ -12,24 +16,12 @@ module DB
     session.close if session && session.is_open
   end
 
-  def self.save(entity)
-    transaction { |s| s.save(entity.class.to_s, entity) }
-  end
-
-  def self.get(model_class, *args)
-    transaction do |session|
-      data_set = session.get(model_class.to_s, *args)
-
-      if data_set.is_a?(Java::OrgHibernateCollectionInternal::PersistentSet)
-        data_set.to_array.map { |item| model_class.new(item) }
-      else
-        model_class.new(data_set)
+  class << self
+    %w(save get).each do |method|
+      define_method(method) do |*args|
+        transaction { |s| s.public_send(method, *args) }
       end
     end
-  end
-
-  def shutdown
-    session_factory.close
   end
 
   private

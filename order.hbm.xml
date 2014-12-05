@@ -3,25 +3,26 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping package="rubyobj">
-  <class entity-name="Order" table="orders">
-    <id name="id" type="long">
+<hibernate-mapping package="rubyobj" default-access="rubyobj.PoroPropertyAccessor">
+  <class name="Order" table="orders">
+    <tuplizer entity-mode="pojo" class="rubyobj.PoroEntityTuplizer" />
+
+    <id name="id" type="integer">
       <generator class="native" />
     </id>
 
+    <!--
     <bag name="lines" table="order_lines" order-by="position asc" cascade="all">
+      <tuplizer entity-mode="pojo" class="rubyobj.PoroComponentTuplizer" />
+
       <key column="order_id" not-null="true" />
-      <one-to-many entity-name="Order::Line" />
+
+      <composite-element class="Order::Line">
+        <property name="title" type="string" />
+        <property name="price" type="double" scale="2" />
+        <property name="position" type="long" />
+      </composite-element>
     </bag>
-  </class>
-
-  <class entity-name="Order::Line" table="order_lines">
-    <id name="id" type="long">
-      <generator class="native" />
-    </id>
-
-    <property name="title" type="string" />
-    <property name="price" type="double" scale="2" />
-    <property name="position" type="long" />
+    -->
   </class>
 </hibernate-mapping>

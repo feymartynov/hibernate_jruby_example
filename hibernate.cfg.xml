@@ -10,10 +10,9 @@
     <property name="connection.username">ep</property>
     <property name="connection.password">q123</property>
     <property name="connection.pool_size">1</property>
-    <property name="current_session_context_class">thread</property>
-    <property name="show_sql">true</property>
     <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
-    <property name="default_entity_mode">dynamic-map</property>
+    <property name="show_sql">true</property>
+    <property name="format_sql">true</property>
 
     <mapping resource="order.hbm.xml"/>
   </session-factory>
