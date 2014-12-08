@@ -11,8 +11,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.PropertyAccessException;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.internal.CoreLogging;
-import org.hibernate.internal.CoreMessageLogger;
 
 import javax.script.ScriptContext; 
 import javax.script.ScriptEngine; 
@@ -22,8 +20,6 @@ import javax.script.ScriptException;
 import org.jruby.RubyObject;
 
 public class PoroPropertyAccessor implements PropertyAccessor {
-	private static final CoreMessageLogger LOG = CoreLogging.messageLogger(PoroPropertyAccessor.class);
-
 	public static final class PoroGetter implements Getter {
 		private Class klass;
 		private final String propertyName;

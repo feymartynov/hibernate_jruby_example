@@ -23,6 +23,9 @@ module DB
   private
 
   def self.session_factory
-    @session_factory ||= Java::OrgHibernateCfg::Configuration.new.configure.build_session_factory
+    @session_factory ||= Java::OrgHibernateCfg::Configuration.new
+                             .configure
+                             .build_session_factory
+                             # .setPersisterClassResolver(Java::OrgHibernaterb::PoroPersisterClassResolver)
   end
 end

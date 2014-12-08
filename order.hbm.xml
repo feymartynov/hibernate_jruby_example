@@ -5,6 +5,7 @@
 
 <hibernate-mapping package="rubyobj" default-access="org.hibernaterb.PoroPropertyAccessor">
   <class name="Order" table="orders">
+    <tuplizer entity-mode="pojo" class="org.hibernaterb.PoroEntityTuplizer" />
 
     <id name="id" type="integer">
       <generator class="native" />
