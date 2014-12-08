@@ -1,12 +1,11 @@
 require 'java'
 require 'jruby/core_ext'
 
-# JAVA_OPTS="-Djava.util.logging.config.file=logging.properties" rspec
-$CLASSPATH << File.dirname(__FILE__)
-
 require 'rubygems'
 require 'bundler'
 Bundler.require
+
+require 'load_java'
 
 require 'active_support'
 require 'active_support/dependencies'

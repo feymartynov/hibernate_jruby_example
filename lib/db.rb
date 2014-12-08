@@ -1,7 +1,3 @@
-require 'lib/poro_property_accessor'
-require 'lib/poro_entity_tuplizer'
-require 'lib/poro_component_tuplizer'
-
 module DB
   def self.transaction
     session = session_factory.get_current_session

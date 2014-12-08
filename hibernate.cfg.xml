@@ -11,6 +11,7 @@
     <property name="connection.password">q123</property>
     <property name="connection.pool_size">1</property>
     <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+    <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
     <property name="show_sql">true</property>
     <property name="format_sql">true</property>
 
