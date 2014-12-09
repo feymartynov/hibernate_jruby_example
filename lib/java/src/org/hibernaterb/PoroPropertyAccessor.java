@@ -103,7 +103,7 @@ public class PoroPropertyAccessor implements PropertyAccessor {
                 context.setAttribute("target", target, ScriptContext.ENGINE_SCOPE);
                 context.setAttribute("writer_name", propertyName + '=', ScriptContext.ENGINE_SCOPE);
                 context.setAttribute("value", value, ScriptContext.ENGINE_SCOPE);
-                rubyEngine.eval("$target.public_send($writer_name, $value)");
+                rubyEngine.eval("$target.public_send($writer_name, $value);");
             } catch (ScriptException exc) {
                 throw new PropertyAccessException(
                         exc,

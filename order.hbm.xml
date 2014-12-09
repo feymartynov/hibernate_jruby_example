@@ -11,6 +11,10 @@
       <generator class="native" />
     </id>
 
+    <property name="status" type="string" />
+    <property name="created_at" type="timestamp" />
+
+    <!--
     <bag name="lines" table="order_lines" order-by="position asc" cascade="all">
       <key column="order_id" not-null="true" />
 
@@ -22,5 +26,6 @@
         <property name="position" type="long" />
       </composite-element>
     </bag>
+    -->
   </class>
 </hibernate-mapping>

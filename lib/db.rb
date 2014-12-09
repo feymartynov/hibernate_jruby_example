@@ -12,12 +12,12 @@ module DB
     session.close if session && session.is_open
   end
 
-  class << self
-    %w(save get).each do |method|
-      define_method(method) do |*args|
-        transaction { |s| s.public_send(method, *args) }
-      end
-    end
+  def self.save(*args)
+    transaction { |s| s.save(*args) }
+  end
+
+  def self.get(*args)
+    transaction { |s| s.get(*args) }
   end
 
   private
