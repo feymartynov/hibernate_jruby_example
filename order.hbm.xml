@@ -7,7 +7,7 @@
   <class name="Order" table="orders">
     <tuplizer entity-mode="pojo" class="org.hibernaterb.PoroEntityTuplizer" />
 
-    <id name="id" type="integer">
+    <id name="id" type="long">
       <generator class="native" />
     </id>
 
