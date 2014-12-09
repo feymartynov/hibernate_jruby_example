@@ -44,7 +44,7 @@ public class PoroInstantiator implements Instantiator, Serializable {
         try {
             ScriptContext context = rubyEngine.getContext();
             context.setAttribute("klass", mappedClass, ScriptContext.ENGINE_SCOPE);
-            rubyEngine.eval("binding.pry; $result = $klass.new");
+            rubyEngine.eval("$result = $klass.new");
             return context.getAttribute("result");
         } catch (ScriptException exc) {
             throw new InstantiationException(

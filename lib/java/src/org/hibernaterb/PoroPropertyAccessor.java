@@ -36,7 +36,13 @@ public class PoroPropertyAccessor implements PropertyAccessor {
                 ScriptContext context = rubyEngine.getContext();
                 context.setAttribute("target", target, ScriptContext.ENGINE_SCOPE);
                 context.setAttribute("reader_name", propertyName, ScriptContext.ENGINE_SCOPE);
-                rubyEngine.eval("$result = $target.public_send($reader_name).to_java");
+                rubyEngine.eval(
+                    "$result = $target.public_send($reader_name);" +
+                    "$result = if $result.is_a?(Array);" +
+                                 "Java::JavaUtil::ArrayList.new($result);" +
+                               "else;" +
+                                 "$result.to_java;" +
+                               "end;");
                 return context.getAttribute("result");
             } catch (ScriptException exc) {
                 throw new PropertyAccessException(
