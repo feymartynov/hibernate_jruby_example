@@ -8,11 +8,16 @@
     <tuplizer entity-mode="pojo" class="org.hibernaterb.PoroEntityTuplizer" />
 
     <id name="id" type="long">
-      <generator class="native" />
+      <column name="id" />
+      <generator class="identity" />
     </id>
 
-    <property name="status" type="string" />
-    <property name="created_at" type="timestamp" />
+    <property name="total" column="total" type="long" />
+    <property name="total2" column="total2" type="long" />
+    <property name="status" column="status" type="string" />
+
+    <!--<property name="created_at" column="created_at" type="timestamp" />-->
+    <!--<property name="deleted" column="deleted" type="boolean" />-->
 
     <!--
     <bag name="lines" table="order_lines" order-by="position asc" cascade="all">

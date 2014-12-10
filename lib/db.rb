@@ -3,9 +3,10 @@ module DB
     session = session_factory.get_current_session
     tx = session.begin_transaction
     result = yield(session)
+    binding.pry
     tx.commit
     result
-  rescue
+  rescue Exception
     tx.rollback if tx
     raise
   ensure
@@ -26,6 +27,5 @@ module DB
     @session_factory ||= Java::OrgHibernateCfg::Configuration.new
                              .configure
                              .build_session_factory
-                             # .setPersisterClassResolver(Java::OrgHibernaterb::PoroPersisterClassResolver)
   end
 end
