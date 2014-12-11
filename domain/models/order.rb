@@ -4,7 +4,7 @@ class Order
   attribute :id, Integer
   attribute :total, Integer, default: 0
   # attribute :status, String, default: 'draft'
-  attribute :lines, ['Order::Line']
+  # attribute :lines, ['Order::Line']
   # attribute :created_at, Time
   # attribute :deleted, Boolean, default: false
 
@@ -13,5 +13,4 @@ class Order
     lines << Order::Line.new(attrs)
   end
 
-  become_java!(false)
 end

@@ -7,13 +7,14 @@
   <session-factory>
     <property name="connection.url">jdbc:mysql://localhost:3306/hibernate_example</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="connection.username">ep</property>
-    <property name="connection.password">q123</property>
+    <property name="connection.username">root</property>
+    <property name="connection.password"></property>
     <property name="connection.pool_size">1</property>
     <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
     <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
     <property name="show_sql">true</property>
     <property name="format_sql">true</property>
+    <property name="hibernate.default_entity_mode">dynamic-map</property>
 
     <mapping resource="order.hbm.xml"/>
   </session-factory>

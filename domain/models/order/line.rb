@@ -5,5 +5,4 @@ class Order::Line
   attribute :price, Integer
   attribute :position, Integer
 
-  become_java!(false)
 end

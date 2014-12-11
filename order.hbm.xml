@@ -3,9 +3,10 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
-<hibernate-mapping package="rubyobj" default-access="org.hibernaterb.PoroPropertyAccessor">
-  <class name="Order" table="orders">
-    <tuplizer entity-mode="pojo" class="org.hibernaterb.PoroEntityTuplizer" />
+<hibernate-mapping package="rubyobj" default-access="org.jruby.ribs.RubyPropertyAccessor">
+  <class entity-name="Order" table="orders">
+    <!--<tuplizer entity-mode="pojo" class="org.hibernaterb.PoroEntityTuplizer" />-->
+    <tuplizer entity-mode="dynamic-map" class="org.jruby.ribs.RubyTuplizer" />
 
     <id name="id" column="id" type="long">
       <generator class="identity" />
