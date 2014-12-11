@@ -97,7 +97,6 @@ public class PoroPropertyAccessor implements PropertyAccessor {
                 throws HibernateException {
             try {
                 ScriptContext context = rubyEngine.getContext();
-                context.setAttribute("method", "SET", ScriptContext.ENGINE_SCOPE);
                 context.setAttribute("target", target, ScriptContext.ENGINE_SCOPE);
                 context.setAttribute("writer_name", propertyName + '=', ScriptContext.ENGINE_SCOPE);
                 context.setAttribute("value", value, ScriptContext.ENGINE_SCOPE);

@@ -50,14 +50,6 @@ class PoroEntityTuplizer extends AbstractEntityTuplizer {
                 lazyPropertyNames.add(property.getName());
             }
         }
-
-        String[] getterNames = new String[propertySpan];
-        String[] setterNames = new String[propertySpan];
-
-        for (int i = 0; i < propertySpan; i++) {
-            getterNames[i] = getters[i].getMethodName();
-            setterNames[i] = setters[i].getMethodName();
-        }
     }
 
     public PoroEntityTuplizer(EntityMetamodel entityMetamodel, EntityBinding mappedEntity) {
@@ -67,14 +59,6 @@ class PoroEntityTuplizer extends AbstractEntityTuplizer {
             if (property.isLazy()) {
                 lazyPropertyNames.add(property.getAttribute().getName());
             }
-        }
-
-        String[] getterNames = new String[propertySpan];
-        String[] setterNames = new String[propertySpan];
-
-        for (int i = 0; i < propertySpan; i++) {
-            getterNames[i] = getters[i].getMethodName();
-            setterNames[i] = setters[i].getMethodName();
         }
     }
 
