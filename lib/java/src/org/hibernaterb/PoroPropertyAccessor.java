@@ -11,6 +11,7 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.property.Getter;
 import org.hibernate.property.PropertyAccessor;
 import org.hibernate.property.Setter;
+
 import org.jruby.RubyObject;
 
 import javax.script.ScriptContext;
@@ -20,13 +21,11 @@ import javax.script.ScriptException;
 
 public class PoroPropertyAccessor implements PropertyAccessor {
     public static final class PoroGetter implements Getter {
-        private Class klass;
         private final String propertyName;
 
         private static ScriptEngine rubyEngine = new ScriptEngineManager().getEngineByName("jruby");
 
-        private PoroGetter(Class klass, String propertyName) {
-            this.klass = klass;
+        private PoroGetter(String propertyName) {
             this.propertyName = propertyName;
         }
 
@@ -49,7 +48,7 @@ public class PoroPropertyAccessor implements PropertyAccessor {
                         exc,
                         "Ruby error occured while getting attribute",
                         true,
-                        klass,
+                        null,
                         propertyName);
             }
         }
@@ -81,17 +80,15 @@ public class PoroPropertyAccessor implements PropertyAccessor {
 
         @Override
         public String toString() {
-            return "PoroGetter(" + klass.getName() + '.' + propertyName + ')';
+            return "PoroGetter(" + propertyName + ')';
         }
     }
 
     public static final class PoroSetter implements Setter {
-        private Class klass;
         private final String propertyName;
         private static ScriptEngine rubyEngine = new ScriptEngineManager().getEngineByName("jruby");
 
-        private PoroSetter(Class klass, String propertyName) {
-            this.klass = klass;
+        private PoroSetter(String propertyName) {
             this.propertyName = propertyName;
         }
 
@@ -110,7 +107,7 @@ public class PoroPropertyAccessor implements PropertyAccessor {
                         exc,
                         "Ruby error occured while setting attribute",
                         true,
-                        klass,
+                        null,
                         propertyName);
             }
         }
@@ -127,15 +124,15 @@ public class PoroPropertyAccessor implements PropertyAccessor {
 
         @Override
         public String toString() {
-            return "PoroSetter(" + klass.getName() + '.' + propertyName + ')';
+            return "PoroSetter(" + propertyName + ')';
         }
     }
 
     public Getter getGetter(Class klass, String propertyName) {
-        return new PoroGetter(klass, propertyName);
+        return new PoroGetter(propertyName);
     }
 
     public Setter getSetter(Class klass, String propertyName) {
-        return new PoroSetter(klass, propertyName);
+        return new PoroSetter(propertyName);
     }
 }

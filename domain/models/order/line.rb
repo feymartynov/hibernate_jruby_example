@@ -4,6 +4,4 @@ class Order::Line
   attribute :title, String
   attribute :price, Float
   attribute :position, Integer
-
-  become_java!(false)
 end

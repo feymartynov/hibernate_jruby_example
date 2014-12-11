@@ -4,7 +4,7 @@
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping default-access="org.hibernaterb.PoroPropertyAccessor">
-  <class name="rubyobj.Order" table="orders">
+  <class entity-name="Order" table="orders">
     <tuplizer entity-mode="pojo" class="org.hibernaterb.PoroEntityTuplizer" />
 
     <id name="id" type="long">
@@ -13,17 +13,15 @@
     </id>
 
     <property name="total" column="total" type="long" />
-    <property name="total2" column="total2" type="long" />
     <property name="status" column="status" type="string" />
-
-    <!--<property name="created_at" column="created_at" type="timestamp" />-->
-    <!--<property name="deleted" column="deleted" type="boolean" />-->
+    <property name="created_at" column="created_at" type="timestamp" />
+    <property name="deleted" column="deleted" type="boolean" />
 
     <!--
     <bag name="lines" table="order_lines" order-by="position asc" cascade="all">
       <key column="order_id" not-null="true" />
 
-      <composite-element class="rubyobj.Order.Line">
+      <composite-element class="Order::Line">
         <tuplizer entity-mode="pojo" class="org.hibernaterb.PoroComponentTuplizer" />
 
         <property name="title" type="string" />
