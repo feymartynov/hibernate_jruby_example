@@ -5,6 +5,7 @@ import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Date;
 
 import org.hibernate.HibernateException;
 import org.hibernate.PropertyAccessException;
@@ -100,23 +101,19 @@ public class PoroPropertyAccessor implements PropertyAccessor {
         }
 
         @Override
-        public void set(Object target, Object value, SessionFactoryImplementor factory)
-                throws HibernateException {
-            try {
-                ScriptContext context = rubyEngine.getContext();
-                context.setAttribute("method", "SET", ScriptContext.ENGINE_SCOPE);
-                context.setAttribute("target", target, ScriptContext.ENGINE_SCOPE);
-                context.setAttribute("writer_name", propertyName + '=', ScriptContext.ENGINE_SCOPE);
-                context.setAttribute("value", value, ScriptContext.ENGINE_SCOPE);
-                rubyEngine.eval("$target.public_send($writer_name, $value);");
-            } catch (ScriptException exc) {
-                throw new PropertyAccessException(
-                        exc,
-                        "Ruby error occured while setting attribute",
-                        true,
-                        klass,
-                        propertyName);
+        public void set(Object target, Object value, SessionFactoryImplementor factory) throws HibernateException {
+            Ruby runtime = ((IRubyObject)target).getRuntime();
+
+            IRubyObject rubyObject = null;
+            if(value instanceof Date) {
+                long milisecs = ((Date)value).getTime();
+                rubyObject = RubyTime.newTime(runtime, milisecs);
+            } else {
+                rubyObject = JavaUtil.convertJavaToRuby(runtime, value);
             }
+
+            String name = propertyName.toLowerCase();
+            ((IRubyObject)target).callMethod(runtime.getCurrentContext(),name + "=", rubyObject);
         }
 
         @Override

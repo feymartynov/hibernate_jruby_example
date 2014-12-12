@@ -16,8 +16,8 @@ module DB
     transaction { |s| s.save(*args) }
   end
 
-  def self.get(*args)
-    transaction { |s| s.get(*args) }
+  def self.get(klass, id)
+    transaction { |s| s.get(klass.java_class, id.to_java(:Integer)) }
   end
 
   def self.shutdown
