@@ -20,3 +20,6 @@ jbundle install
 # Run tests/examples
 bundle exec rspec spec
 ```
+
+## Troubleshooting
+* If you get `Unsupported major.minor version` error it means that you have another JDK version. Try recompile java source by running `rake java:compile`.
