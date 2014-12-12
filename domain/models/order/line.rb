@@ -1,8 +1,8 @@
 class Order::Line
-  include Virtus.value_object
+  include Virtus.model
 
   attribute :title, String
-  attribute :price, Float
+  attribute :price, Integer
   attribute :position, Integer
 
   become_java!(false)

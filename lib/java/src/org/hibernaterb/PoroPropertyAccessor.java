@@ -1,7 +1,9 @@
 package org.hibernaterb;
 
+import java.lang.Object;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.hibernate.HibernateException;
@@ -18,7 +20,18 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import org.jruby.Ruby;
+import org.jruby.RubyNumeric;
+import org.jruby.RubyArray;
+import org.jruby.RubyFixnum;
+import org.jruby.RubyTime;
+import org.jruby.javasupport.JavaUtil;
+import org.jruby.runtime.Block;
+import org.jruby.runtime.builtin.IRubyObject;
+import org.jruby.util.ByteList;
+
 public class PoroPropertyAccessor implements PropertyAccessor {
+
     public static final class PoroGetter implements Getter {
         private Class klass;
         private final String propertyName;
@@ -31,26 +44,17 @@ public class PoroPropertyAccessor implements PropertyAccessor {
         }
 
         @Override
-        public Object get(Object target) throws HibernateException {
-            try {
-                ScriptContext context = rubyEngine.getContext();
-                context.setAttribute("target", target, ScriptContext.ENGINE_SCOPE);
-                context.setAttribute("reader_name", propertyName, ScriptContext.ENGINE_SCOPE);
-                rubyEngine.eval(
-                    "$result = $target.public_send($reader_name);" +
-                    "$result = if $result.is_a?(Array);" +
-                                 "Java::JavaUtil::ArrayList.new($result);" +
-                               "else;" +
-                                 "$result.to_java;" +
-                               "end;");
-                return context.getAttribute("result");
-            } catch (ScriptException exc) {
-                throw new PropertyAccessException(
-                        exc,
-                        "Ruby error occured while getting attribute",
-                        true,
-                        klass,
-                        propertyName);
+        public Object get(Object owner) throws HibernateException {
+            Ruby runtime = ((IRubyObject)owner).getRuntime();
+            String name = propertyName.toLowerCase();
+            IRubyObject rubyValue = ((IRubyObject)owner).callMethod(runtime.getCurrentContext(), name);
+
+            if(rubyValue instanceof RubyTime) {
+                return ((RubyTime)rubyValue).getJavaDate();
+            } else if(rubyValue instanceof RubyFixnum) {
+                return RubyNumeric.fix2int(rubyValue);
+            } else {
+                return JavaUtil.convertRubyToJava(rubyValue);
             }
         }
 

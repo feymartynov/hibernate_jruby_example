@@ -10,8 +10,8 @@ class PoroComponentTuplizer extends PojoComponentTuplizer {
         super(component);
     }
 
-    @Override
-    protected Instantiator buildInstantiator(Component component) {
-        return new PoroInstantiator(component);
-    }
+//    @Override
+//    protected Instantiator buildInstantiator(Component component) {
+//        return new PoroInstantiator(component);
+//    }
 }

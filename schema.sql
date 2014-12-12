@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `order_lines`;
 CREATE TABLE `order_lines` (
   `order_id` int(10) unsigned NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `price` float NOT NULL DEFAULT '0',
+  `price` int(10) NOT NULL DEFAULT '0',
   `position` int(10) unsigned NOT NULL,
   UNIQUE KEY `order_id_position_index` (`order_id`,`position`),
   CONSTRAINT `order_lines_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)

@@ -5,7 +5,7 @@ class Order
   attribute :total, Integer, default: 0
   attribute :status, String, default: 'draft'
   attribute :total2, Integer, default: 400
-  # attribute :lines, ['Order::Line']
+  attribute :lines, ['Order::Line']
   # attribute :created_at, Time
   # attribute :deleted, Boolean, default: false
 
