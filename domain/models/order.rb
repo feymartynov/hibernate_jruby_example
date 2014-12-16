@@ -3,7 +3,7 @@ class Order
 
   attribute :id, Integer
   attribute :total, Float, default: 0
-  attribute :status, String, default: :draft
+  attribute :status, Symbol, default: :draft
   attribute :lines, ['Order::Line']
   attribute :created_at, Time
   attribute :deleted, Boolean, default: false

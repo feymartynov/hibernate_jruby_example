@@ -13,7 +13,7 @@ module DB
   end
 
   def self.save(*args)
-    transaction { |s| s.save(*args) }
+    transaction { |s| s.save_or_update(*args) }
   end
 
   def self.get(klass, id)
