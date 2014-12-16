@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `order_lines`;
 CREATE TABLE `order_lines` (
   `order_id` int(10) unsigned NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `price` int(10) NOT NULL DEFAULT '0',
+  `price` double NOT NULL DEFAULT 0,
   `position` int(10) unsigned NOT NULL,
   UNIQUE KEY `order_id_position_index` (`order_id`,`position`),
   CONSTRAINT `order_lines_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
@@ -41,11 +41,13 @@ DROP TABLE IF EXISTS `orders`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `orders` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `total` int(10) unsigned NOT NULL,
+  `total` double unsigned NOT NULL DEFAULT 0,
   `status` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `total2` int(10) unsigned NOT NULL,
---  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
---  `deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  `meeting_place` text COLLATE utf8_unicode_ci,
+  `special_instructions` LONGTEXT,
+  `voucher` blob,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

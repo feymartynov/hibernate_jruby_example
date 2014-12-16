@@ -12,12 +12,12 @@
       <generator class="identity" />
     </id>
 
-    <property name="total" column="total" type="integer" />
-    <property name="total2" column="total2" type="integer" />
-    <property name="status" column="status" type="string" />
-
-    <!--<property name="created_at" column="created_at" type="timestamp" />-->
-    <!--<property name="deleted" column="deleted" type="boolean" />-->
+    <property name="total" type="double" scale="2" />
+    <property name="status" type="string" />
+    <property name="created_at" type="timestamp" />
+    <property name="deleted" type="boolean" />
+    <property name="meeting_place" type="text" />
+    <property name="special_instructions" type="text" />
 
     <bag name="lines" table="order_lines" order-by="position asc" cascade="all">
       <key column="order_id" not-null="true" />
@@ -26,7 +26,7 @@
         <tuplizer entity-mode="pojo" class="org.hibernaterb.PoroComponentTuplizer" />
 
         <property name="title" type="string" />
-        <property name="price" type="integer" />
+        <property name="price" type="double" scale="2" />
         <property name="position" type="integer" />
       </composite-element>
     </bag>

@@ -3,59 +3,88 @@ package org.hibernaterb;
 import java.lang.Object;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.Integer;
+import java.lang.Double;
+import java.lang.Boolean;
+import java.lang.String;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Date;
 
 import org.hibernate.HibernateException;
-import org.hibernate.PropertyAccessException;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.property.Getter;
 import org.hibernate.property.PropertyAccessor;
 import org.hibernate.property.Setter;
-import org.jruby.RubyObject;
 
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
-import org.jruby.Ruby;
-import org.jruby.RubyNumeric;
-import org.jruby.RubyArray;
-import org.jruby.RubyFixnum;
-import org.jruby.RubyTime;
 import org.jruby.javasupport.JavaUtil;
-import org.jruby.runtime.Block;
 import org.jruby.runtime.builtin.IRubyObject;
-import org.jruby.util.ByteList;
+import org.jruby.Ruby;
+import org.jruby.RubyFixnum;
+import org.jruby.RubyFloat;
+import org.jruby.RubyBignum;
+import org.jruby.RubyTime;
+import org.jruby.RubyBoolean;
+import org.jruby.RubyString;
+import org.jruby.RubySymbol;
+import org.jruby.RubyClass;
+import org.jruby.RubyModule;
+import org.jruby.RubyArray;
+import org.jruby.RubyNil;
+import org.jruby.ext.bigdecimal.RubyBigDecimal;
 
 public class PoroPropertyAccessor implements PropertyAccessor {
 
     public static final class PoroGetter implements Getter {
         private Class klass;
         private final String propertyName;
-
-        private static ScriptEngine rubyEngine = new ScriptEngineManager().getEngineByName("jruby");
+        private final String name;
 
         private PoroGetter(Class klass, String propertyName) {
             this.klass = klass;
             this.propertyName = propertyName;
+            this.name = propertyName.toLowerCase();
         }
 
         @Override
         public Object get(Object owner) throws HibernateException {
-            Ruby runtime = ((IRubyObject)owner).getRuntime();
-            String name = propertyName.toLowerCase();
-            IRubyObject rubyValue = ((IRubyObject)owner).callMethod(runtime.getCurrentContext(), name);
+            if (!(owner instanceof IRubyObject)) {
+                throw new HibernateException("Attempted to get an attribute from a non-ruby object.");
+            }
 
-            if(rubyValue instanceof RubyTime) {
-                return ((RubyTime)rubyValue).getJavaDate();
-            } else if(rubyValue instanceof RubyFixnum) {
-                return RubyNumeric.fix2int(rubyValue);
+            Ruby runtime = ((IRubyObject) owner).getRuntime();
+            IRubyObject rubyValue = ((IRubyObject) owner).callMethod(runtime.getCurrentContext(), name);
+
+            if (rubyValue instanceof RubyFixnum) {
+                return rubyValue.toJava(Integer.class);
+            } else if (rubyValue instanceof RubyFloat) {
+                return rubyValue.toJava(Double.class);
+            } else if (rubyValue instanceof RubyBigDecimal) {
+                return rubyValue.toJava(BigDecimal.class);
+            } else if (rubyValue instanceof RubyBignum) {
+                return rubyValue.toJava(BigInteger.class);
+            } else if (rubyValue instanceof RubyTime) {
+                return rubyValue.toJava(Date.class);
+            } else if (rubyValue instanceof RubyBoolean) {
+                return rubyValue.toJava(Boolean.class);
+            } else if (rubyValue instanceof RubyString ||
+                       rubyValue instanceof RubySymbol ||
+                       rubyValue instanceof RubyClass ||
+                       rubyValue instanceof RubyModule) {
+                return rubyValue.toJava(String.class);
+            } else if (rubyValue instanceof RubyArray) {
+                return rubyValue;
+            } else if (rubyValue instanceof RubyNil) {
+                return null;
             } else {
-                return JavaUtil.convertRubyToJava(rubyValue);
+                throw new HibernateException(
+                        String.format(
+                                "Unknown value type `%s` for property `%s`.",
+                                rubyValue.getMetaClass().getName(),
+                                name));
             }
         }
 
@@ -66,7 +95,7 @@ public class PoroPropertyAccessor implements PropertyAccessor {
 
         @Override
         public Class getReturnType() {
-            return RubyObject.class;
+            return Object.class;
         }
 
         @Override
@@ -93,27 +122,27 @@ public class PoroPropertyAccessor implements PropertyAccessor {
     public static final class PoroSetter implements Setter {
         private Class klass;
         private final String propertyName;
-        private static ScriptEngine rubyEngine = new ScriptEngineManager().getEngineByName("jruby");
+        private final String name;
 
         private PoroSetter(Class klass, String propertyName) {
             this.klass = klass;
             this.propertyName = propertyName;
+            this.name = propertyName.toLowerCase();
         }
 
         @Override
         public void set(Object target, Object value, SessionFactoryImplementor factory) throws HibernateException {
-            Ruby runtime = ((IRubyObject)target).getRuntime();
-
+            Ruby runtime = ((IRubyObject) target).getRuntime();
             IRubyObject rubyObject = null;
-            if(value instanceof Date) {
-                long milisecs = ((Date)value).getTime();
+
+            if (value instanceof Date) {
+                long milisecs = ((Date) value).getTime();
                 rubyObject = RubyTime.newTime(runtime, milisecs);
             } else {
                 rubyObject = JavaUtil.convertJavaToRuby(runtime, value);
             }
 
-            String name = propertyName.toLowerCase();
-            ((IRubyObject)target).callMethod(runtime.getCurrentContext(),name + "=", rubyObject);
+            ((IRubyObject)target).callMethod(runtime.getCurrentContext(), name + "=", rubyObject);
         }
 
         @Override

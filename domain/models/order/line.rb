@@ -3,7 +3,7 @@ class Order::Line
   include Equalizer.new :title, :price, :position
 
   attribute :title, String
-  attribute :price, Integer
+  attribute :price, Float, default: 0
   attribute :position, Integer
 
   become_java!(false)

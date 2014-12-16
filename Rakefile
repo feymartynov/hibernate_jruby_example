@@ -6,7 +6,7 @@ namespace :java do
 
     Dir['./lib/java/**/*.java'].each do |file|
       puts "Compiling #{file}"
-      puts `CLASSPATH=#{classpath} javac -sourcepath ./lib/java/src -d ./lib/java/build #{file} 2>&1`
+      puts `CLASSPATH=#{classpath} javac -sourcepath ./lib/java/src -d ./lib/java/build #{file} -Xlint:deprecation 2>&1`
     end
   end
 end
